@@ -6,12 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    protected $fillable = [
-        'title',
-    ];
-
-    protected $attributes = [
-        'description' => '',
-        'completed' => false,
-    ];
+    protected $fillable = ['title', 'description', 'completed'];
 }

@@ -20,7 +20,11 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
+        return Task::create($validated);
     }
 
     /**
