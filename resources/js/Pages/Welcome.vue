@@ -20,7 +20,8 @@ const tasks = ref([
 ]);
 
 async function fetchData() {
-    tasks.value = await axios.get('/api/tasks');
+    const result = await axios.get('/api/tasks');
+    tasks.value = result.data;
 }
 
 watch(() => null, fetchData, { immediate: true })
@@ -31,8 +32,25 @@ async function addTask(event) {
         title: formData.get('title'),
         description: formData.get('description'),
     };
-    const result = await axios.post('/api/tasks', data);
+    axios.post('/api/tasks', data)
+        .then(res => alert('task was added successfully!'))
+        .catch(err => alert(err.message));
     event.target.reset();
+    fetchData();
+}
+
+async function deleteTask(id) {
+    axios.delete(`/api/tasks/${id}`)
+        .then(res => alert(`task number ${id} was deleted successfully!`))
+        .catch(err => alert(err.message));
+    fetchData();
+}
+
+async function updateTask(id) {
+    axios.put(`/api/tasks/${id}`)
+        .then(res => alert(`taask number ${id} was updated successfully!`))
+        .catch(err => alert(err.message));
+    fetchData();
 }
 
 </script>
@@ -48,6 +66,8 @@ async function addTask(event) {
                     <li>Title: {{ task.title }}</li>
                     <li>Description: {{ task.description }}</li>
                     <li>Completed: {{ task.completed }}</li>
+                    <button @click="deleteTask(task.id)">delete</button>
+                    <button @click="updateTask(task.id)">update</button>
                 </ul>
             </li>
         </ol>
