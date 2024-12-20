@@ -22,15 +22,15 @@ const taskEdited = ref(null);
 const toastRef = ref(null);
 
 // Fetch data when component mounts and whenever the page changes
-watch(pagination, fetchData, { immediate: true })
+watch(() => pagination.value.currentPage, fetchData, { immediate: true })
 
 // Retrieve the data from the backend
 async function fetchData() {
     try {
         const result = await axios.get(`/api/tasks?page=${pagination.value.currentPage}`);
+        tasks.value = result.data.data;
         // pagination.value.currentPage = result.data.current_page;
         pagination.value.lastPage = result.data.last_page;
-        tasks.value = result.data.data;
     } catch (error) {
         showToast(`Could not retrieve tasks:\n${error.message}`);
     }
@@ -74,14 +74,14 @@ function showToast(message, type) {
 
     <div>
         <button
-            :disabled="pagination.currentPage > 1"
+            :disabled="pagination.currentPage <= 1"
             @click="pagination.currentPage--"
         >prev</button>
 
         <span>{{ pagination.currentPage }}</span>
 
         <button
-            :disabled="pagination.currentPage < pagination.lastPage"
+            :disabled="pagination.currentPage >= pagination.lastPage"
             @click="pagination.currentPage++"
         >next</button>
     </div>
