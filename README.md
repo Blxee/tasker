@@ -6,12 +6,13 @@ An easy to use and simple full-stack web application for managing tasks.
 
 Before running the app, make sure you have the following tools installed:
 
-* [__Git__](#)
-* [__Npm__](#)
-* [__Php__](#)
-* [__Laravel__](#)
+* [__Git__](https://git-scm.com/)
+* [__NodeJS + NPM__](https://nodejs.org/en)
+* [__PHP__](https://www.php.net/)
+* [__Laravel__](https://laravel.com/docs/11.x/installation#installing-php)
+* [__MySQL__](https://www.mysql.com/)
 
-### Getting started:
+### Getting started 🚀:
 
 * First clone this repository to your computer using:
 
