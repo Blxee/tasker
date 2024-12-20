@@ -19,7 +19,7 @@ watch(() => task.completed, () => {
     const data = {
         title: task.title,
         description: task.description,
-        completed: task.completed == 'true',
+        completed: task.completed,
     };
     axios.put(`/api/tasks/${task.id}`, data)
         .then(res => emit('on-toast', 'Task was updated successfully', 'success'))
@@ -60,8 +60,8 @@ function deleteTask() {
                 <span class="me-auto underline font-bold">Completed:</span>
                 <input
                     type="checkbox"
-                    @click="(event) => { task.completed = event.target.checked }"
-                    checked="task.completed"
+                    @click="(event) => { task.completed = event.target.checked; }"
+                    :checked="task.completed"
                 />
             </div>
         </li>
