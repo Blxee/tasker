@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits } from 'vue';
+import { defineEmits, watch } from 'vue';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
@@ -13,11 +13,25 @@ const { task } = defineProps({
     }
 });
 
-async function deleteTask() {
+// When the 'completed' field changes, commit to the database
+watch(() => task.completed, () => {
+    // send the data to update this task
+    const data = {
+        title: task.title,
+        description: task.description,
+        completed: task.completed == 'true',
+    };
+    axios.put(`/api/tasks/${task.id}`, data)
+        .then(res => emit('on-toast', 'Task was updated successfully', 'success'))
+        .catch(err => emit('on-toast', `Could not update task:\n${err.message}`, 'error'))
+        .finally(() => emit('on-fetch-data'));
+});
+
+function deleteTask() {
     axios.delete(`/api/tasks/${task.id}`)
         .then(res => emit('on-toast', 'Task was deleted successfully', 'success'))
         .catch(err => emit('on-toast', `Could not delete task:\n${err.message}`, 'error'))
-        .finally(() => emit('on-task-delete'));
+        .finally(() => emit('on-fetch-data'));
 }
 
 </script>
@@ -41,7 +55,14 @@ async function deleteTask() {
         </li>
         <li class="p-2.5">
             <div>{{ task.description }}</div>
-            <div>{{ task.completed ? "Completed" : "Uncompleted" }}</div>
+            <div class="flex">
+                <span class="me-auto justify-center">Completed:</span>
+                <input
+                    type="checkbox"
+                    @click="(event) => { task.completed = event.target.checked }"
+                    checked="task.completed"
+                />
+            </div>
         </li>
     </ul>
 </template>

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const emit = defineEmits();
 
-async function addTask(event) {
+function addTask(event) {
     const formData = new FormData(event.target);
     const data = {
         title: formData.get('title'),

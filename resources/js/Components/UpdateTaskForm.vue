@@ -11,7 +11,7 @@ const { task } = defineProps({
 
 const emit = defineEmits();
 
-async function updateTask(event) {
+function updateTask(event) {
     const formData = new FormData(event.target);
     const data = {
         title: formData.get('title'),
