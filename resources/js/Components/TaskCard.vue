@@ -37,7 +37,7 @@ function deleteTask() {
 </script>
 
 <template>
-    <ul class="overflow-hidden shadow-xl rounded-3xl border-2 border-gray-500 aspect-square w-full bg-blue-200">
+    <ul class="overflow-hidden shadow-xl rounded-3xl border-2 border-gray-500 aspect-square w-full bg-blue-200 flex flex-col">
         <li class="flex bg-blue-300 p-2.5">
             <span class="font-bold me-auto truncate">{{ task.title }}</span>
             <button
@@ -53,11 +53,11 @@ function deleteTask() {
                 <FontAwesomeIcon :icon="faTrashCan" class="text-red-500" />
             </button>
         </li>
-        <li class="p-2.5 flex flex-col h-max">
+        <li class="p-2.5 flex flex-col grow">
             <div>{{ task.description }}</div>
 
-            <div class="flex ms-auto">
-                <span class="me-auto justify-center underline font-bold">Completed:</span>
+            <div class="flex mt-auto items-center">
+                <span class="me-auto underline font-bold">Completed:</span>
                 <input
                     type="checkbox"
                     @click="(event) => { task.completed = event.target.checked }"
