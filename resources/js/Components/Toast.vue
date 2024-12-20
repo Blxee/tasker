@@ -1,5 +1,4 @@
 <script setup>
-
 import { ref } from 'vue';
 
 const visible = ref(false);
@@ -19,7 +18,7 @@ defineExpose({ show });
 </script>
 
 <template>
-    <div v-if="visible" class="absolute bottom-0"
+    <div v-if="visible" class="absolute bottom-4 left-1/2 right-1/2 -translate-x-1/2 rounded min-w-max"
         :class="{
             'bg-green-500': toastType === 'success',
             'bg-red-500': toastType === 'error',

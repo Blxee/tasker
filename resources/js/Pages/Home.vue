@@ -4,6 +4,7 @@ import axios from 'axios';
 import AddTaskForm from '@/Components/AddTaskForm.vue';
 import UpdateTaskForm from '@/Components/UpdateTaskForm.vue';
 import Toast from '@/Components/Toast.vue';
+import TaskCard from '@/Components/TaskCard.vue';
 
 // The tasks list
 const tasks = ref([]);
@@ -16,6 +17,12 @@ const taskEdited = ref(null);
 
 const toastRef = ref(null);
 
+onMounted(() => {
+    // Fetch all tasks as soon as the component mounts
+    fetchData();
+});
+
+// Retrieve the data from the backend
 async function fetchData() {
     const result = await axios.get('/api/tasks');
     tasks.value = result.data;
@@ -29,50 +36,38 @@ function onFormSubmit() {
     fetchData();
 }
 
-onMounted(() => {
-    fetchData();
-});
-
-async function deleteTask(id) {
-    axios.delete(`/api/tasks/${id}`)
-        .then(res => alert(`task number ${id} was deleted successfully!`))
-        .catch(err => alert(err.message))
-        .finally(fetchData);
-}
-
-async function updateTask(id) {
-    axios.put(`/api/tasks/${id}`)
-        .then(res => alert(`taask number ${id} was updated successfully!`))
-        .catch(err => alert(err.message))
-        .finally(fetchData);
+function openUpdateForm(task) {
+    // Show the update task form
+    updateForm.value = true;
+    // Pre-fill the form with the original task data
+    taskEdited.value = task;
 }
 
 function showToast(message, type) {
     toastRef.value?.show(message, type);
 }
+
 </script>
 
 <template>
-    <template v-if="tasks">
+    <div class="text-7xl">Tasker</div>
+    <template v-if="tasks && tasks.length > 0">
         <h1>Tasks:</h1>
         <ol>
             <li v-for="task in tasks" v-bind:key="task.id">
-                <ul>
-                    <li>Title: {{ task.title }}</li>
-                    <li>Description: {{ task.description }}</li>
-                    <li>Completed: {{ task.completed }}</li>
-                    <button @click="deleteTask(task.id)">delete</button>
-                    <button @click="updateForm = true; taskEdited = task">update</button>
-                </ul>
+                <TaskCard :task="task" @on-task-update="openUpdateForm" @on-task-delete="fetchData" @on-toast="showToast" />
             </li>
         </ol>
     </template>
+    <template v-else>
+        You have no task yet!<br>
+        Press <b>Add Task</b> to create one!
+    </template>
 
-    <AddTaskForm v-if="addForm" @form-submitted="onFormSubmit"/>
+    <UpdateTaskForm v-if="updateForm" :task="taskEdited" @on-toast="showToast" @form-submitted="onFormSubmit"/>
+
+    <AddTaskForm v-if="addForm" @on-toast="showToast" @form-submitted="onFormSubmit"/>
     <button @click="addForm = true">Add Task</button>
 
-    <UpdateTaskForm v-if="updateForm" :task="taskEdited" @form-submitted="onFormSubmit"/>
-
     <Toast ref="toastRef" />
-    <button @click="showToast('hello toast', 'success')">Toaaaaast-----------------</button>
 </template>

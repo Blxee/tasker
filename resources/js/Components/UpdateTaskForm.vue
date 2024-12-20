@@ -1,5 +1,6 @@
 <script setup>
 import { defineEmits } from 'vue';
+import axios from 'axios';
 
 const { task } = defineProps({
     task: {
@@ -19,8 +20,8 @@ async function updateTask(event) {
 
     // send the data to update this task
     axios.put(`/api/tasks/${task.id}`, data)
-        .then(res => alert('task was updated successfully!'))
-        .catch(err => alert(err.message))
+        .then(res => emit('on-toast', 'Task was updated successfully', 'success'))
+        .catch(err => emit('on-toast', `Could not update task:\n${err.message}`, 'error'))
         .finally(() => emit('form-submitted'));
 }
 

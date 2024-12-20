@@ -1,5 +1,6 @@
 <script setup>
 import { defineEmits } from 'vue';
+import axios from 'axios';
 
 const emit = defineEmits();
 
@@ -11,8 +12,8 @@ async function addTask(event) {
     };
     // send the data to create a new task
     axios.post('/api/tasks', data)
-        .then(res => alert('task was added successfully!'))
-        .catch(err => alert(err.message))
+        .then(res => emit('on-toast', 'Task was created successfully', 'success'))
+        .catch(err => emit('on-toast', `Could not create task:\n${err.message}`, 'error'))
         .finally(() => emit('form-submitted'));
     // Reset the form fields
     event.target.reset();
