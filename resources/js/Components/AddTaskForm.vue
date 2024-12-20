@@ -14,7 +14,6 @@ async function addTask(event) {
         .then(res => alert('task was added successfully!'))
         .catch(err => alert(err.message))
         .finally(() => emit('form-submitted'));
-    // location.reload()
     // Reset the form fields
     event.target.reset();
 }
