@@ -80,27 +80,33 @@ function showToast(message, type) {
             Press <b>Add Task</b> to create one!
         </div>
 
-        <div>
+        <div class="w-full bg-gray-200 px-4 py-0.5 flex items-center">
             <button
                 :disabled="pagination.currentPage <= 1"
                 @click="pagination.currentPage--"
-            >prev</button>
+                class="ms-auto rounded-lg border-2 border-blue-900 disabled:opacity-50 bg-blue-400 hover:bg-blue-600 px-3 py-1 m-3"
+            >Prev</button>
 
-            <span>{{ pagination.currentPage }}</span>
+            <span class="font-lg font-bold">{{ pagination.currentPage }}</span>
 
             <button
                 :disabled="pagination.currentPage >= pagination.lastPage"
                 @click="pagination.currentPage++"
-            >next</button>
+                class="me-auto rounded-lg border-2 border-blue-900 disabled:opacity-50 bg-blue-400 hover:bg-blue-600 px-3 py-1 m-3"
+            >Next</button>
         </div>
 
         <UpdateTaskForm v-if="updateForm" :task="taskEdited" @on-toast="showToast" @form-submitted="onFormSubmit"/>
 
         <AddTaskForm v-if="addForm" @on-toast="showToast" @form-submitted="onFormSubmit"/>
-        <button @click="addForm = true" class="p-5 aspect-square rounded-full fixed bottom-3 right-3 bg-blue-500 text-blue-900 text-2xl">
-            <FontAwesomeIcon :icon="faFeather" class="aspect-square" size="xl" />
-        </button>
 
         <Toast ref="toastRef" />
+
+        <button
+            @click="addForm = true"
+            class="p-5 aspect-square rounded-full fixed bottom-3 right-3 bg-blue-500 text-blue-900 text-2xl"
+        >
+            <FontAwesomeIcon :icon="faFeather" class="aspect-square" size="xl" />
+        </button>
     </div>
 </template>
