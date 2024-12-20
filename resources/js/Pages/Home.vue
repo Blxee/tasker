@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import axios from 'axios';
 import AddTaskForm from '@/Components/AddTaskForm.vue';
+import UpdateTaskForm from '@/Components/UpdateTaskForm.vue';
 
 // The tasks list
 const tasks = ref([]);
@@ -9,6 +10,8 @@ const tasks = ref([]);
 // These determine whether a form is still open
 const addForm = ref(false);
 const updateForm = ref(false);
+// Reference to the task that is currently being edited
+const taskEdited = ref(null);
 
 async function fetchData() {
     const result = await axios.get('/api/tasks');
@@ -16,9 +19,10 @@ async function fetchData() {
 }
 
 // Close the form after submitting
-function closeForms() {
+function onFormSubmit() {
     addForm.value = false;
     updateForm.value = false;
+    taskEdited.value = null;
     fetchData();
 }
 
@@ -50,13 +54,15 @@ async function updateTask(id) {
                     <li>Description: {{ task.description }}</li>
                     <li>Completed: {{ task.completed }}</li>
                     <button @click="deleteTask(task.id)">delete</button>
-                    <button @click="updateTask(task.id)">update</button>
+                    <button @click="updateForm = true; taskEdited = task">update</button>
                 </ul>
             </li>
         </ol>
     </template>
 
-    <AddTaskForm v-if="addForm" @form-submitted="closeForms"/>
+    <AddTaskForm v-if="addForm" @form-submitted="onFormSubmit"/>
     <button @click="addForm = true">Add Task</button>
+
+    <UpdateTaskForm v-if="updateForm" :task="taskEdited" @form-submitted="onFormSubmit"/>
 
 </template>
