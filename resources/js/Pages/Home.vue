@@ -1,8 +1,9 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import AddTaskForm from '@/Components/AddTaskForm.vue';
 import UpdateTaskForm from '@/Components/UpdateTaskForm.vue';
+import Toast from '@/Components/Toast.vue';
 
 // The tasks list
 const tasks = ref([]);
@@ -12,6 +13,8 @@ const addForm = ref(false);
 const updateForm = ref(false);
 // Reference to the task that is currently being edited
 const taskEdited = ref(null);
+
+const toastRef = ref(null);
 
 async function fetchData() {
     const result = await axios.get('/api/tasks');
@@ -26,7 +29,9 @@ function onFormSubmit() {
     fetchData();
 }
 
-watch(() => null, fetchData, { immediate: true })
+onMounted(() => {
+    fetchData();
+});
 
 async function deleteTask(id) {
     axios.delete(`/api/tasks/${id}`)
@@ -42,6 +47,9 @@ async function updateTask(id) {
         .finally(fetchData);
 }
 
+function showToast(message, type) {
+    toastRef.value?.show(message, type);
+}
 </script>
 
 <template>
@@ -65,4 +73,6 @@ async function updateTask(id) {
 
     <UpdateTaskForm v-if="updateForm" :task="taskEdited" @form-submitted="onFormSubmit"/>
 
+    <Toast ref="toastRef" />
+    <button @click="showToast('hello toast', 'success')">Toaaaaast-----------------</button>
 </template>
