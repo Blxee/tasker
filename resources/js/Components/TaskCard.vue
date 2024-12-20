@@ -1,6 +1,8 @@
 <script setup>
 import { defineEmits } from 'vue';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faHouse } from '@fortawesome/free-solid-svg-icons'
 
 const emit = defineEmits();
 
@@ -21,7 +23,8 @@ async function deleteTask() {
 </script>
 
 <template>
-    <ul>
+    <ul class="rounded-xl border-2 border-gray-500 aspect-square w-32 m-2 p-2.5">
+        <FontAwesomeIcon :icon="faHouse" />
         <li>Title: {{ task.title }}</li>
         <li>Description: {{ task.description }}</li>
         <li>Completed: {{ task.completed }}</li>

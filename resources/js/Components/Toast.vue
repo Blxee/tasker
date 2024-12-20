@@ -18,7 +18,7 @@ defineExpose({ show });
 </script>
 
 <template>
-    <div v-if="visible" class="absolute bottom-4 left-1/2 right-1/2 -translate-x-1/2 rounded min-w-max"
+    <div v-if="visible" class="absolute bottom-4 left-1/2 right-1/2 -translate-x-1/2 rounded-full min-w-max p-5"
         :class="{
             'bg-green-500': toastType === 'success',
             'bg-red-500': toastType === 'error',

@@ -58,38 +58,45 @@ function showToast(message, type) {
 </script>
 
 <template>
-    <div class="text-7xl">Tasker</div>
-    <template v-if="tasks && tasks.length > 0">
-        <h1>Tasks:</h1>
-        <ol>
-            <li v-for="task in tasks" v-bind:key="task.id">
-                <TaskCard :task="task" @on-task-update="openUpdateForm" @on-task-delete="fetchData" @on-toast="showToast" />
-            </li>
-        </ol>
-    </template>
-    <template v-else>
-        You have no task yet!<br>
-        Press <b>Add Task</b> to create one!
-    </template>
+    <div class="text-xl">
+        <div class="text-7xl bg-gray-200">Tasker</div>
+        <template v-if="tasks && tasks.length > 0">
+            <h1>Tasks:</h1>
+            <div class="grid grid-cols-5">
+                <TaskCard
+                    v-for="task in tasks"
+                    v-bind:key="task.id"
+                    :task="task"
+                    @on-task-update="openUpdateForm"
+                    @on-task-delete="fetchData"
+                    @on-toast="showToast"
+                />
+            </div>
+        </template>
+        <template v-else>
+            You have no task yet!<br>
+            Press <b>Add Task</b> to create one!
+        </template>
 
-    <div>
-        <button
-            :disabled="pagination.currentPage <= 1"
-            @click="pagination.currentPage--"
-        >prev</button>
+        <div>
+            <button
+                :disabled="pagination.currentPage <= 1"
+                @click="pagination.currentPage--"
+            >prev</button>
 
-        <span>{{ pagination.currentPage }}</span>
+            <span>{{ pagination.currentPage }}</span>
 
-        <button
-            :disabled="pagination.currentPage >= pagination.lastPage"
-            @click="pagination.currentPage++"
-        >next</button>
+            <button
+                :disabled="pagination.currentPage >= pagination.lastPage"
+                @click="pagination.currentPage++"
+            >next</button>
+        </div>
+
+        <UpdateTaskForm v-if="updateForm" :task="taskEdited" @on-toast="showToast" @form-submitted="onFormSubmit"/>
+
+        <AddTaskForm v-if="addForm" @on-toast="showToast" @form-submitted="onFormSubmit"/>
+        <button @click="addForm = true">Add Task</button>
+
+        <Toast ref="toastRef" />
     </div>
-
-    <UpdateTaskForm v-if="updateForm" :task="taskEdited" @on-toast="showToast" @form-submitted="onFormSubmit"/>
-
-    <AddTaskForm v-if="addForm" @on-toast="showToast" @form-submitted="onFormSubmit"/>
-    <button @click="addForm = true">Add Task</button>
-
-    <Toast ref="toastRef" />
 </template>
