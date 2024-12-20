@@ -6,7 +6,7 @@ import UpdateTaskForm from '@/Components/UpdateTaskForm.vue';
 import Toast from '@/Components/Toast.vue';
 import TaskCard from '@/Components/TaskCard.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faFeather } from '@fortawesome/free-solid-svg-icons'
+import { faFeather, faBook } from '@fortawesome/free-solid-svg-icons'
 
 // The tasks list
 const tasks = ref([]);
@@ -61,7 +61,10 @@ function showToast(message, type) {
 
 <template>
     <div class="text-xl">
-        <div class="text-7xl bg-gray-200">Tasker</div>
+        <div class="text-7xl bg-gray-200 py-4 font-extrabold text-center text-gray-800">
+            <FontAwesomeIcon :icon="faBook" class="aspect-square" size="xl" />
+            Tasker
+        </div>
         <div v-if="tasks && tasks.length > 0" class="m-2">
             <h1>Tasks:</h1>
             <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
@@ -70,7 +73,7 @@ function showToast(message, type) {
                     v-bind:key="task.id"
                     :task="task"
                     @on-task-update="openUpdateForm"
-                    @on-task-delete="fetchData"
+                    @on-fetch-data="fetchData"
                     @on-toast="showToast"
                 />
             </div>

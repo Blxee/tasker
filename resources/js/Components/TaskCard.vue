@@ -53,10 +53,11 @@ function deleteTask() {
                 <FontAwesomeIcon :icon="faTrashCan" class="text-red-500" />
             </button>
         </li>
-        <li class="p-2.5">
+        <li class="p-2.5 flex flex-col h-max">
             <div>{{ task.description }}</div>
-            <div class="flex">
-                <span class="me-auto justify-center">Completed:</span>
+
+            <div class="flex ms-auto">
+                <span class="me-auto justify-center underline font-bold">Completed:</span>
                 <input
                     type="checkbox"
                     @click="(event) => { task.completed = event.target.checked }"
