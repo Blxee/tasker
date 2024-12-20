@@ -5,6 +5,8 @@ import AddTaskForm from '@/Components/AddTaskForm.vue';
 import UpdateTaskForm from '@/Components/UpdateTaskForm.vue';
 import Toast from '@/Components/Toast.vue';
 import TaskCard from '@/Components/TaskCard.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faFeather } from '@fortawesome/free-solid-svg-icons'
 
 // The tasks list
 const tasks = ref([]);
@@ -60,9 +62,9 @@ function showToast(message, type) {
 <template>
     <div class="text-xl">
         <div class="text-7xl bg-gray-200">Tasker</div>
-        <template v-if="tasks && tasks.length > 0">
+        <div v-if="tasks && tasks.length > 0" class="m-2">
             <h1>Tasks:</h1>
-            <div class="grid grid-cols-5">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
                 <TaskCard
                     v-for="task in tasks"
                     v-bind:key="task.id"
@@ -72,11 +74,11 @@ function showToast(message, type) {
                     @on-toast="showToast"
                 />
             </div>
-        </template>
-        <template v-else>
+        </div>
+        <div v-else>
             You have no task yet!<br>
             Press <b>Add Task</b> to create one!
-        </template>
+        </div>
 
         <div>
             <button
@@ -95,7 +97,9 @@ function showToast(message, type) {
         <UpdateTaskForm v-if="updateForm" :task="taskEdited" @on-toast="showToast" @form-submitted="onFormSubmit"/>
 
         <AddTaskForm v-if="addForm" @on-toast="showToast" @form-submitted="onFormSubmit"/>
-        <button @click="addForm = true">Add Task</button>
+        <button @click="addForm = true" class="p-5 aspect-square rounded-full fixed bottom-3 right-3 bg-blue-500 text-blue-900 text-2xl">
+            <FontAwesomeIcon :icon="faFeather" class="aspect-square" size="xl" />
+        </button>
 
         <Toast ref="toastRef" />
     </div>

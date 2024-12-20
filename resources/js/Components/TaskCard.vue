@@ -2,7 +2,7 @@
 import { defineEmits } from 'vue';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faHouse } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 const emit = defineEmits();
 
@@ -23,12 +23,25 @@ async function deleteTask() {
 </script>
 
 <template>
-    <ul class="rounded-xl border-2 border-gray-500 aspect-square w-32 m-2 p-2.5">
-        <FontAwesomeIcon :icon="faHouse" />
-        <li>Title: {{ task.title }}</li>
-        <li>Description: {{ task.description }}</li>
-        <li>Completed: {{ task.completed }}</li>
-        <button @click="deleteTask">delete</button>
-        <button @click="emit('on-task-update', task)">update</button>
+    <ul class="overflow-hidden shadow-xl rounded-3xl border-2 border-gray-500 aspect-square w-full bg-blue-200">
+        <li class="flex bg-blue-300 p-2.5">
+            <span class="font-bold me-auto truncate">{{ task.title }}</span>
+            <button
+                class="hover:ring-white hover:ring-2 rounded-md mx-0.5 px-0.5"
+                @click="emit('on-task-update', task)"
+            >
+                <FontAwesomeIcon :icon="faPenToSquare" class="text-green-500" />
+            </button>
+            <button
+                class="hover:ring-white hover:ring-2 rounded-md mx-0.5 px-0.5"
+                @click="deleteTask"
+            >
+                <FontAwesomeIcon :icon="faTrashCan" class="text-red-500" />
+            </button>
+        </li>
+        <li class="p-2.5">
+            <div>{{ task.description }}</div>
+            <div>{{ task.completed ? "Completed" : "Uncompleted" }}</div>
+        </li>
     </ul>
 </template>
