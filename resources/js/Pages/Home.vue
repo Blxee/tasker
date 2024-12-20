@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import axios from 'axios';
 import AddTaskForm from '@/Components/AddTaskForm.vue';
 import UpdateTaskForm from '@/Components/UpdateTaskForm.vue';
@@ -8,7 +8,11 @@ import TaskCard from '@/Components/TaskCard.vue';
 
 // The tasks list
 const tasks = ref([]);
-
+// pagination value
+const pagination = ref({
+    currentPage: 1,
+    lastPage: -1,
+});
 // These determine whether a form is still open
 const addForm = ref(false);
 const updateForm = ref(false);
@@ -17,15 +21,19 @@ const taskEdited = ref(null);
 
 const toastRef = ref(null);
 
-onMounted(() => {
-    // Fetch all tasks as soon as the component mounts
-    fetchData();
-});
+// Fetch data when component mounts and whenever the page changes
+watch(pagination, fetchData, { immediate: true })
 
 // Retrieve the data from the backend
 async function fetchData() {
-    const result = await axios.get('/api/tasks');
-    tasks.value = result.data;
+    try {
+        const result = await axios.get(`/api/tasks?page=${pagination.value.currentPage}`);
+        // pagination.value.currentPage = result.data.current_page;
+        pagination.value.lastPage = result.data.last_page;
+        tasks.value = result.data.data;
+    } catch (error) {
+        showToast(`Could not retrieve tasks:\n${error.message}`);
+    }
 }
 
 // Close the form after submitting
@@ -63,6 +71,20 @@ function showToast(message, type) {
         You have no task yet!<br>
         Press <b>Add Task</b> to create one!
     </template>
+
+    <div>
+        <button
+            :disabled="pagination.currentPage > 1"
+            @click="pagination.currentPage--"
+        >prev</button>
+
+        <span>{{ pagination.currentPage }}</span>
+
+        <button
+            :disabled="pagination.currentPage < pagination.lastPage"
+            @click="pagination.currentPage++"
+        >next</button>
+    </div>
 
     <UpdateTaskForm v-if="updateForm" :task="taskEdited" @on-toast="showToast" @form-submitted="onFormSubmit"/>
 
