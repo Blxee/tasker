@@ -41,3 +41,12 @@ php artisan serve
 ```
 
 Now you can visit [this link](http://127.0.0.1:8000) to test the app.
+
+### API routes:
+
+|route|method|description|
+|-----|------|-----------|
+|`/api/tasks?page=<n>`|__GET__|Retrieves all available tasks in pages of 10|
+|`/api/tasks`|__POST__|Creates a new task with title and description|
+|`/api/tasks/:id`|__PUT__|Updates a task using its `id`|
+|`/api/tasks/:id`|__DELETE__|Deletes a task using its `id`|
